@@ -11,6 +11,7 @@ import java.util.Optional;
 @Service
 public class TrackServiceImpl implements TrackService {
     private TrackRepository trackRepository;
+
     @Autowired
     public TrackServiceImpl(TrackRepository trackRepository) {
         this.trackRepository = trackRepository;
@@ -29,17 +30,25 @@ public class TrackServiceImpl implements TrackService {
     }
 
     @Override
-    public List<Track> getAllTracks(){
-        List<Track> trackList=trackRepository.findAll();
+    public List<Track> getAllTracks() {
+        List<Track> trackList = trackRepository.findAll();
         return trackList;
     }
-    @Override
-    public Optional<Track> trackdelById(int id){
-        Optional<Track> delete=trackRepository.findById(id);
 
-        if (delete.isPresent()){
+    @Override
+    public Optional<Track> trackdelById(int id) {
+        Optional<Track> delete = trackRepository.findById(id);
+
+        if (delete.isPresent()) {
             trackRepository.deleteById(id);
         }
         return delete;
+    }
+    @Override
+    public Track updateTrack(int id, Track track) {
+        Track update = trackRepository.findById(id).get();
+        update.setName(track.getName());
+        update.setComments(track.getComments());
+        return trackRepository.save(track);
     }
 }
